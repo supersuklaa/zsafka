@@ -6,7 +6,7 @@ var app      = express();
 var env = process.env.NODE_ENV || 'development';
 var port = process.env.PORT || 8080;
 
-var pg = require('knex')({
+var knew = require('knex')({
 	client: 'pg',
 	connection: process.env.DATABASE_URL
 });
