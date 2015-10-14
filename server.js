@@ -11,7 +11,7 @@ var pg = require('knex')({
 	connection: process.env.DATABASE_URL
 });
 
-knex.schema.hasTable('test').then(function(exists) {
+knex.schema.hasTable('users').then(function(exists) {
 	if (!exists) {
 		return knex.schema.createTable('users', function(t) {
 			t.increments('id').primary();
@@ -19,3 +19,9 @@ knex.schema.hasTable('test').then(function(exists) {
 		});
 	}
 });
+
+knex('users').insert({nimi: 'antti'})
+
+app.listen(port);
+console.log("App listening on port " + port);
+
