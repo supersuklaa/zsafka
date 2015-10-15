@@ -1,0 +1,12 @@
+<html ng-app="zsafka">
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+	<script src="core.js"></script>
+</head>
+<body ng-controller="mainController">
+<form>
+	Nimi: <input type="text" name="nimi" ng-model="formData.nimi">
+	<button type="submit" ng-click="addUser()">Add</button>
+</form>
+</body>
+</html>

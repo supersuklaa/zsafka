@@ -33,7 +33,5 @@ else {
     cfg.db = dbConfigs[cfg.env];
 }
 
-// Create tables
-
 // Module exports
 module.exports = cfg;

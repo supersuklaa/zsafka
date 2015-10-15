@@ -1,11 +1,13 @@
 
-var express  = require('express');
-var bodyParser = require('body-parser'); 
+var express      = require('express');
+var bodyParser   = require('body-parser'); 
+var schema       = require('./schema');
+var users        = require('./users');
 
-var schema   = require('./schema');
 
-var app      = express();
+var app = express();
 
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); 
 
@@ -13,10 +15,20 @@ var port = process.env.PORT || 8080;
 
 // Routes
 
-app.get('/create/table/:table', function(req, res) {
-	schema.createTable(req.params.table);
-	res.send("JESA");
+app.post('/create/table/', function(req, res) {
+	schema.createTable(req.body.table);
 });
+
+app.post('/add/user/', function(req, res) {
+	users.add(req.body.nimi);
+	res.redirect('/');
+});
+
+app.get('*', function(req, res) {
+	res.sendfile('./public/index.html');
+});
+
+// Listen
 
 app.listen(port);
 console.log("App listening on port " + port);
