@@ -6,6 +6,8 @@ var db = {};
 
 db.create = function (knex) {
 
+	console.log("jeejee");
+
 	return knex.schema.
 		createTable('users', function(t) {
 			t.increments('id').primary();
@@ -26,6 +28,7 @@ db.create = function (knex) {
 			t.integer('safka').references('id').inTable('safkat');
 			t.integer('user').references('id').inTable('users');
 		});
+
 /*		
 	return knex.schema.
 		hasTable('users').then(function(exists) {
@@ -65,4 +68,6 @@ db.create = function (knex) {
 }
 
 // Module exports
-module.exports = db;
+module.exports = {
+	create: db.create
+}
