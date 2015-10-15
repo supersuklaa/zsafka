@@ -1,16 +1,13 @@
-
+var config = require('./config');
 
 var express  = require('express');
 var app      = express();
-var pg       = require('pg');
-
-var knex = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL
-});
+//var pg       = require('pg');
+var knex     = require('knex')(config.db);
 
 var port = process.env.PORT || 8080;
 
+/*
 knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
     return knex.schema.createTable('users', function(t) {
@@ -20,7 +17,9 @@ knex.schema.hasTable('users').then(function(exists) {
       t.text('bio');
     });
   }
-});
+});*/
+
+knex('users').insert({first_name: 'etu', last_name: 'suku'})
 
 app.listen(port);
 console.log("App listening on port " + port);
