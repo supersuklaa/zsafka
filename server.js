@@ -4,7 +4,6 @@ var bodyParser   = require('body-parser');
 var schema       = require('./schema');
 var users        = require('./users');
 
-
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
