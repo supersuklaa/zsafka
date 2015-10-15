@@ -19,9 +19,9 @@ var createTables = function() {
 			return knex.schema.createTable('safkat', function(t) {
 				t.increments('id').primary();
 				t.string('nimi', 100);
-				t.float('rasva').defaulTo(0);
-				t.float('hiilari').defaulTo(0);
-				t.float('protsku').defaulTo(0);
+				t.float('rasva').defaultTo(0);
+				t.float('hiilari').defaultTo(0);
+				t.float('protsku').defaultTo(0);
 			});
 		}
 	});
@@ -40,6 +40,6 @@ var createTables = function() {
 
 }
 
-module.exports {
+module.exports = {
 	createTables: createTables
 }
