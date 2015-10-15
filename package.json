@@ -12,6 +12,7 @@
     "morgan"     : "~1.2.2",
     "body-parser": "~1.5.2",
     "method-override": "~2.1.2",
-    "lodash": "~3.9.3"
+    "lodash": "~3.9.3",
+    "password-hash": "1.2.2"
     }
 }

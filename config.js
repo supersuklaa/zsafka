@@ -33,4 +33,5 @@ else {
     cfg.db = dbConfigs[cfg.env];
 }
 
+// Module exports
 module.exports = cfg;
