@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var cfg = {}; // the cfg object which will be returned
 
 cfg.env = process.env.NODE_ENV || 'development';
