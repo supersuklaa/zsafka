@@ -2,10 +2,10 @@
 var config      = require('./config');
 var knex        = require('knex')(config.db);
 
-var createTables = function(table) {
+var createTable = function(table) {
 
 	var columns = {
-		
+
 		users: function(t) {
 			t.increments('id').primary();
 			t.string('nimi', 100);
@@ -63,5 +63,5 @@ var createTables = function(table) {
 }
 
 module.exports = {
-	createTables: createTables
+	createTable: createTable
 }

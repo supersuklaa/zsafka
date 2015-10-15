@@ -13,8 +13,8 @@ var port = process.env.PORT || 8080;
 
 // Routes
 
-app.get('/createTables', function(req, res) {
-	schema.createTables();
+app.get('/create/table/:table', function(req, res) {
+	schema.createTable(req.params.table);
 	res.send("JESA");
 });
 
