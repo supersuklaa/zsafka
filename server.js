@@ -15,6 +15,7 @@ var port = process.env.PORT || 8080;
 
 app.get('/createTables', function(req, res) {
 	schema.createTables();
+	res.send("JESA");
 });
 
 app.listen(port);
