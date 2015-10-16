@@ -33,9 +33,8 @@ app.post('/add/nutri/', function(req, res) {
   	pros: req.body.pros
   }
 
-	db.addNutri(input, function(err) {
-		if (!err) console.log('Added a nutriment');
-		res.redirect('/');
+	db.addNutri(input, function(msg) {
+		res.json(msg);
 	});
 
 });
