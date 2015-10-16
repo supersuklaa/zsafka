@@ -1,12 +1,30 @@
 <html ng-app="zsafka">
 <head>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
 	<script src="core.js"></script>
 </head>
-<body ng-controller="mainController">
-<form>
-	Nimi: <input type="text" name="nimi" ng-model="formData.nimi">
+<body ng-controller="main">
+<h1>zsafka</h1>
+<h2>Add user</h2>
+<form id="addUser">
+	Nickname: <input type="text" ng-model="userdata.name">
+	Password: <input type="text" ng-model="userdata.password">
 	<button type="submit" ng-click="addUser()">Add</button>
+</form>
+<h2>Add nutriment</h2>
+<form id="addNutri">
+	Name: <input type="text" ng-model="nutridata.name">
+	Fats: <input type="text" ng-model="nutridata.fats">
+	Carbs: <input type="text" ng-model="nutridata.carbs">
+	Proteins: <input type="text" ng-model="nutridata.pros">
+	<button type="submit" ng-click="addNutri()">Add</button>
+</form>
+<h2>Add portion</h2>
+<form id="addPorti">
+	Eater: <input type="text" ng-model="portidata.user">
+	Amount: <input type="text" ng-model="portidata.amount">
+	Nutriment: <input type="text" ng-model="portidata.user">
+	<button type="submit" ng-click="addPorti()">Add</button>
 </form>
 </body>
 </html>
