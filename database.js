@@ -31,7 +31,7 @@ var createTable = function(t, callback) {
 
 		portions: function(t) {
 			t.increments('id').primary();
-			t.dateTime('date');
+			t.date('date').defaultTo(knex.raw('now()'));
 			t.integer('amount');
 			t.integer('nutriment').references('id').inTable('nutriments');
 			t.integer('user').references('id').inTable('users');
@@ -53,7 +53,11 @@ var createTable = function(t, callback) {
 	callback(msg);
 }
 
-var add = function (target, input, callback) { // TODO better naming for 'target'
+// add user, nutriment or portion
+
+var add = function (target, input, callback) {
+
+	// TODO better naming for 'target'
 
 	// msg to client (json)
 
@@ -87,10 +91,25 @@ var add = function (target, input, callback) { // TODO better naming for 'target
 
 }
 
+var dailyportions = function (user, callback) {
+
+	// inb4 complex knex-scheise
+
+	knex('portions')
+		.join('nutriments', 'nutriments.id', 'portions.nutriment')
+		.select('portions.date', 'nutriments.name').sum('portions.amount')
+		.where('portions.user', user)
+		.groupBy('portions.date', 'nutriments.name')
+		.then(function(data) {
+			callback(data);
+		});
+}
+
 // exports
 
 module.exports = {
 	createTable: createTable,
-	add: add
+	add: add,
+	dailyportions: dailyportions
 }
 
