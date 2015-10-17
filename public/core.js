@@ -1,46 +1,18 @@
-// public/core.js
+
 var zsafka = angular.module('zsafka', []);
 
 function main($scope, $http) {
-	$scope.userdata = {};
 
-	$scope.addUser = function() {
-		$http.post('/add/user', $scope.userdata)
+	$scope.add = function(target) {
+
+		$http.post('/add/' + target, $scope[target])
 		.success(function(data) {
-			$scope.userdata = {};
+			$scope[target] = {};
 			console.log(data);
 		})
-
 		.error(function(data) {
-			console.log('Error: ' + data);
+			console.log('error: ' + data);
 		});
 	};
 
-	$scope.nutridata = {};
-
-	$scope.addNutri = function() {
-		$http.post('/add/nutri', $scope.nutridata)
-		.success(function(data) {
-			$scope.nutridata = {};
-			console.log(data);
-		})
-		
-		.error(function(data) {
-			console.log('Error: ' + data);
-		});
-	};
-
-	$scope.portidata = {};
-
-	$scope.addPorti = function() {
-		$http.post('/add/porti', $scope.portidata)
-		.success(function(data) {
-			$scope.portidata = {};
-			console.log(data);
-		})
-		
-		.error(function(data) {
-			console.log('Error: ' + data);
-		});
-	};
 }

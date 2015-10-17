@@ -1,6 +1,7 @@
 
 var express      = require('express');
 var bodyParser   = require('body-parser');
+var _            = require('lodash');
 var db           = require('./database');
 
 var app = express();
@@ -11,8 +12,6 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;
 
-// routes
-
 // create table
 
 app.get('/create/table/:table', function(req, res) {
@@ -21,40 +20,49 @@ app.get('/create/table/:table', function(req, res) {
 	});
 });
 
+// add user, nutriment or portion
 
-// add nutriment
+app.post('/add/:target', function(req, res) {
 
-app.post('/add/nutri/', function(req, res) {
+  var target = req.params.target;
 
   var input = {
-  	name: req.body.name,
-  	fats: req.body.fats,
-  	carbs: req.body.carbs,
-  	pros: req.body.pros
+    user: {
+      name: req.body.name,
+      password: req.body.password
+    },
+
+    nutriment: {
+      name: req.body.name,
+      fats: req.body.fats,
+      carbs: req.body.carbs,
+      pros: req.body.pros
+    },
+
+    portion: {
+      user: req.body.user,
+      amount: req.body.amount,
+      nutriment: req.body.nutriment
+    }
   }
 
-	db.addNutri(input, function(msg) {
-		res.json(msg);
-	});
+  // if it is defined above, send input to database.js
+
+  if (!_.isUndefined(input[target])) {
+
+  	db.add(target, input[target], function(msg) {
+  		  res.json(msg);
+  	});
+
+  } else {
+    res.json({
+      'error': 'wtf is ' + target + '???'
+    });
+  }
 
 });
 
-// add user
-
-app.post('/add/user/', function(req, res) {
-
-  var input = {
-  	name: req.body.name,
-  	password: req.body.password
-  }
-
-	db.addUser(input, function(msg) {
-		res.json(msg);
-	});
-
-});
-
-// actual html-page, angular handles front-end rendering
+// actual html-page, angular handles that sh*t
 
 app.get('*', function(req, res) {
 	res.sendfile('./public/index.html');

@@ -4,7 +4,7 @@ var cfg = {}; // the cfg object which will be returned
 
 cfg.env = process.env.NODE_ENV || 'development';
 
-// Environment specific database configs
+// environment specific database configs
 var dbConfigs = {
     development: {
         client: 'postgresql',
@@ -25,7 +25,7 @@ var dbConfigs = {
     }
 };
 
-// Determine the correct database config
+// determine the correct database config
 if (_.isUndefined(dbConfigs[cfg.env])) {
     cfg.db = dbConfigs.development;
 }
@@ -33,5 +33,5 @@ else {
     cfg.db = dbConfigs[cfg.env];
 }
 
-// Module exports
+// module exports
 module.exports = cfg;

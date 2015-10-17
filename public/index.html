@@ -6,25 +6,25 @@
 <body ng-controller="main">
 <h1>zsafka</h1>
 <h2>Add user</h2>
-<form id="addUser">
-	Nickname: <input type="text" ng-model="userdata.name">
-	Password: <input type="text" ng-model="userdata.password">
-	<button type="submit" ng-click="addUser()">Add</button>
+<form id="">
+	Nickname: <input type="text" ng-model="user.name">
+	Password: <input type="text" ng-model="user.password">
+	<button type="submit" ng-click="add('user')">Add</button>
 </form>
 <h2>Add nutriment</h2>
-<form id="addNutri">
-	Name: <input type="text" ng-model="nutridata.name">
-	Fats: <input type="text" ng-model="nutridata.fats">
-	Carbs: <input type="text" ng-model="nutridata.carbs">
-	Proteins: <input type="text" ng-model="nutridata.pros">
-	<button type="submit" ng-click="addNutri()">Add</button>
+<form id="">
+	Name: <input type="text" ng-model="nutriment.name">
+	Fats: <input type="text" ng-model="nutriment.fats">
+	Carbs: <input type="text" ng-model="nutriment.carbs">
+	Proteins: <input type="text" ng-model="nutriment.pros">
+	<button type="submit" ng-click="add('nutriment')">Add</button>
 </form>
 <h2>Add portion</h2>
-<form id="addPorti">
-	Eater: <input type="text" ng-model="portidata.user">
-	Amount: <input type="text" ng-model="portidata.amount">
-	Nutriment: <input type="text" ng-model="portidata.user">
-	<button type="submit" ng-click="addPorti()">Add</button>
+<form id="">
+	Eater: <input type="text" ng-model="portion.user">
+	Amount: <input type="text" ng-model="portion.amount">
+	Nutriment: <input type="text" ng-model="portion.nutriment">
+	<button type="submit" ng-click="add('portion')">Add</button>
 </form>
 </body>
 </html>

@@ -4,15 +4,17 @@ var knex       = require('knex')(config.db);
 var hash       = require('password-hash');
 var _          = require('lodash');
 
+// create table
+
 var createTable = function(t, callback) {
 
-	// msg (json) to be sent to angular
+	// msg (json) to client
 
 	var msg = {};
 
 	// model for database
 
-	var dbModel = {
+	var dbModels = {
 		users: function(t) {
 			t.increments('id').primary();
 			t.string('name', 100).unique();
@@ -36,61 +38,46 @@ var createTable = function(t, callback) {
 		}
 	}
 
-	// check if table is declared and then if it exists,
-	// and create it if not
+	// check if table is declared
+	// then if it exists
+	// if not, create it
 
-	if (!_.isUndefined(dbModel[t])) {
+	if (!_.isUndefined(dbModels[t])) {
 		knex.schema.hasTable(t).then(function(exists) {
 			if (!exists) {
-				return knex.schema.createTable(t, dbModel[t]);
+				return knex.schema.createTable(t, dbModels[t]);
 			}
 		});
-	}
-
-	else {
-		msg.error = 'No model for table ' + t;
 	}
 
 	callback(msg);
 }
 
-var addUser = function (input, callback) {
+var add = function (target, input, callback) { // TODO better naming for 'target'
 
-	var msg = {};
+	// msg to client (json)
 
-	var inserts = {
-		name: input.name,
-		password: hash.generate(input.password)
-	};
+	var msg = {}
 
-	knex('users')
-	.insert(inserts)
+	// tables for targets
+
+	var table = {
+		user: 'users',
+		nutriment: 'nutriments',
+		portion: 'portions'
+	}
+
+	// hash the password
+
+	if (input.password) input.password = hash.generate(input.password);
+
+	// actual sql-insert
+
+	knex(table[target])
+	.insert(input)
 	.then(function() {
-		msg.success = 'User ' + inserts.name + ' added';
-		callback(msg);
-	})
-	.catch(function(error) {
-		msg.error = error;
-		callback(msg);
-	});
-	
-}
-
-var addNutri = function (input, callback) {
-
-	var msg = {};
-
-	var inserts = {
-		name: input.name,
-		fats: input.fats,
-		carbs: input.carbs,
-		pros: input.pros
-	};
-
-	knex('nutriments')
-	.insert(inserts)
-	.then(function() {
-		msg.success = 'Nutriment ' + inserts.name + ' added';
+		msg.success = 'Added ' + target;
+		msg.insert = input;
 		callback(msg);
 	})
 	.catch(function(error) {
@@ -104,6 +91,6 @@ var addNutri = function (input, callback) {
 
 module.exports = {
 	createTable: createTable,
-	addUser: addUser,
-	addNutri: addNutri
+	add: add
 }
+
