@@ -21,7 +21,7 @@ var port = process.env.PORT || 8080;
 // create table
 // TODO make sense with this route
 
-app.get('/create/table/:table', function(req, res) {
+app.post('/create/table/:table', function(req, res) {
 	db.createTable(req.params.table, function(msg) {
 		res.json(msg);
 	});
@@ -31,8 +31,7 @@ app.get('/create/table/:table', function(req, res) {
 
 app.get('/data/dailyportions', function(req, res) {
 
-  //var user = 1; // dev setting!!!
-  var user = (req.session.userid) ? req.session.userid : "";
+  var user = req.session.userid || "";
 
   if (user) {
     db.dailyportions(user, function(data) {
@@ -50,11 +49,17 @@ app.get('/data/dailyportions', function(req, res) {
 
 app.get('/data/dailyvalues', function(req, res) {
 
-  var user = 1; // dev setting!!!
+  var user = req.session.userid || "";
 
-  db.dailyvalues(user, function(data) {
-    res.json(data);
-  });
+  if (user) {
+    db.dailyvalues(user, function(data) {
+      res.json(data);
+    });
+
+  } else {
+    res.json({ 'error': 'log in please' });
+
+  }
 
 });
 
@@ -63,6 +68,7 @@ app.get('/data/dailyvalues', function(req, res) {
 app.post('/add/:target', function(req, res) {
 
   var target = req.params.target;
+  var user = req.session.userid || "";
 
   var input = {
     user: {
@@ -78,7 +84,7 @@ app.post('/add/:target', function(req, res) {
     },
 
     portion: {
-      user: req.body.user,
+      user: user,
       amount: req.body.amount,
       nutriment: req.body.nutriment
     }
@@ -109,7 +115,7 @@ app.post('/login/', function(req, res) {
     if (userid) {
       req.session.username = username;
       req.session.userid = userid;
-      res.json('jeejee');
+      res.json({'success': '1'});
     } else { res.json({ 'error': 'wrong username or password' }); }
   });
 
@@ -120,11 +126,20 @@ app.post('/login/', function(req, res) {
 app.get('/front/js', function(req, res) {
 
   // check if user is logged in
-  var user = (req.session.userid) ? req.session.userid : "";
+  var user = req.session.userid || "";
 
   if (user) res.sendfile('./www/core.js');
   else res.sendfile('./www/login.js');
 
+});
+
+// logout
+
+app.get('/logout/', function(req, res) {
+  req.session.username = "";
+  req.session.userid = "";
+
+  res.redirect('/');
 });
 
 // actual html-page, angular handles that sh*t
@@ -132,7 +147,7 @@ app.get('/front/js', function(req, res) {
 app.get('*', function(req, res) {
 
   // check if user is logged in
-  var user = (req.session.userid) ? req.session.userid : "";
+  var user = req.session.userid || "";
 
   if (user) {
     res.sendfile('./www/index.html');

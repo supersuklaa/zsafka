@@ -104,7 +104,8 @@ var dailyportions = function (user, callback) {
 
 	knex('portions')
 		.join('nutriments', 'nutriments.id', 'portions.nutriment')
-		.select('portions.date', 'nutriments.name').sum('portions.amount as amount')
+		.select(knex.raw("to_char(portions.date, 'DD.MM.YY') as date"))
+		.select('nutriments.name').sum('portions.amount as amount')
 		.where('portions.user', user)
 		.groupBy('portions.date', 'nutriments.name')
 		.then(function(data) {
@@ -129,7 +130,7 @@ var dailyvalues = function (user, callback) {
 
 	knex('portions')
 		.join('nutriments', 'nutriments.id', 'portions.nutriment')
-		.select('portions.date')
+		.select(knex.raw("to_char(portions.date, 'DD.MM.YY') as date"))
 		.select(knex.raw('sum(nutriments.fats * portions.amount / 100) as fats'))
 		.select(knex.raw('sum(nutriments.carbs * portions.amount / 100) as carbs'))
 		.select(knex.raw('sum(nutriments.pros * portions.amount / 100) as pros'))
@@ -150,9 +151,18 @@ var login = function (input, callback) {
 		.select('password', 'id', 'name')
 		.where({ name: input.username })
 		.then(function(data) {
-			if (hash.verify(input.password, data[0].password)) {
-				callback(data[0].id, data[0].name);
-			}
+
+			var result = data[0];
+
+			if (result) {
+				// compare passwords
+
+				if (hash.verify(input.password, result.password)) {
+					callback(result.id, result.name);
+
+				} else { callback() }
+			} else { callback() }
+
 		});
 
 }

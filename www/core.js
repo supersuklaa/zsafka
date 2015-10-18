@@ -6,7 +6,6 @@ function main($scope, $http) {
 	$http.get('/data/dailyvalues')
 		.success(function(data) {
 			$scope.wats = data;
-			console.log(data);
 		})
 		.error(function(data) {
 			console.log('Error: ' + data);
@@ -15,7 +14,6 @@ function main($scope, $http) {
 	$http.get('/data/dailyportions')
 		.success(function(data) {
 			$scope.wots = data;
-			console.log(data);
 		})
 		.error(function(data) {
 			console.log('Error: ' + data);

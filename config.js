@@ -14,7 +14,8 @@ var dbConfigs = {
             port: 5432,
             password: 'zsafka',
             database: 'zsafka',
-            charset: 'utf8'
+            charset: 'utf8',
+            timezone: 'utc'
         },
         pool: { min: 0, max: 5 }
     },
