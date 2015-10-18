@@ -32,6 +32,18 @@ app.get('/data/dailyportions', function(req, res) {
 
 });
 
+// get daily nutritional values
+
+app.get('/data/dailyvalues', function(req, res) {
+
+  var user = 1; // dev setting!!!
+
+  db.dailyvalues(user, function(data) {
+    res.json(data);
+  });
+
+});
+
 // add user, nutriment or portion
 
 app.post('/add/:target', function(req, res) {

@@ -1,6 +1,6 @@
 <html ng-app="zsafka">
 <head>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
 	<script src="core.js"></script>
 </head>
 <body ng-controller="main">
@@ -26,5 +26,17 @@
 	Nutriment: <input type="text" ng-model="portion.nutriment">
 	<button type="submit" ng-click="add('portion')">Add</button>
 </form>
+<h1>Daily fun</h1>
+<div>
+	<div ng-repeat="wat in wats">
+		<h3>{{ wat.date }}</h3>
+		<b>{{ wat.fats }} / {{ wat.carbs }} / {{ wat.pros }}</b><br>
+		<span ng-repeat="wot in wots">
+			<span ng-if="wat.date == wot.date">
+				{{ wot.name }} {{ wot.amount }}g
+			</span>
+		</span>
+	</div>
+</div>
 </body>
 </html>

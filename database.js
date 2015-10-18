@@ -91,13 +91,23 @@ var add = function (target, input, callback) {
 
 }
 
+// get daily portions of a user
+
 var dailyportions = function (user, callback) {
 
-	// inb4 complex knex-scheise
+	// inb4 complex knex-sql-scheise
+
+	// sql explained:
+
+	// join nutriments and portions
+	// select date, names and sums of nutriments
+	// where user is da user
+	// group by date, name
+	// --> profit???
 
 	knex('portions')
 		.join('nutriments', 'nutriments.id', 'portions.nutriment')
-		.select('portions.date', 'nutriments.name').sum('portions.amount')
+		.select('portions.date', 'nutriments.name').sum('portions.amount as amount')
 		.where('portions.user', user)
 		.groupBy('portions.date', 'nutriments.name')
 		.then(function(data) {
@@ -105,11 +115,31 @@ var dailyportions = function (user, callback) {
 		});
 }
 
+// get daily nutritional values of a user
+
+var dailyvalues = function (user, callback) {
+
+	knex('portions')
+		.join('nutriments', 'nutriments.id', 'portions.nutriment')
+		.select('portions.date')
+		.select(knex.raw('sum(nutriments.fats * portions.amount / 100) as fats'))
+		.select(knex.raw('sum(nutriments.carbs * portions.amount / 100) as carbs'))
+		.select(knex.raw('sum(nutriments.pros * portions.amount / 100) as pros'))
+		.where('portions.user', user)
+		.groupBy('portions.date')
+		.orderBy('portions.date', 'desc')
+		.then(function(data) {
+			callback(data);
+		});
+
+}
+
 // exports
 
 module.exports = {
 	createTable: createTable,
 	add: add,
-	dailyportions: dailyportions
+	dailyportions: dailyportions,
+	dailyvalues: dailyvalues
 }
 
