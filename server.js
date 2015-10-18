@@ -21,7 +21,7 @@ var port = process.env.PORT || 8080;
 // create table
 // TODO make sense with this route
 
-app.post('/create/table/:table', function(req, res) {
+app.get('/create/table/:table', function(req, res) {
 	db.createTable(req.params.table, function(msg) {
 		res.json(msg);
 	});
