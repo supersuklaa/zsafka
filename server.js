@@ -128,7 +128,7 @@ app.get('/front/js', function(req, res) {
   // check if user is logged in
   var user = req.session.userid || "";
 
-  if (!user) res.sendfile('./www/core.js');
+  if (user) res.sendfile('./www/core.js');
   else res.sendfile('./www/login.js');
 
 });
@@ -149,7 +149,7 @@ app.get('*', function(req, res) {
   // check if user is logged in
   var user = req.session.userid || "";
 
-  if (!user) {
+  if (user) {
     res.sendfile('./www/index.html');
 
   } else { 
