@@ -2,17 +2,24 @@
 var express      = require('express');
 var bodyParser   = require('body-parser');
 var _            = require('lodash');
+var sess         = require('express-session');
 var db           = require('./database');
 
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
+app.use(sess({
+  secret:'kalankakkaa', // TODO heroku has something for this ?
+  resave: false,
+  saveUninitialized: true}));
 
 var port = process.env.PORT || 8080;
 
 // create table
+// TODO make sense with this route
 
 app.get('/create/table/:table', function(req, res) {
 	db.createTable(req.params.table, function(msg) {
@@ -24,11 +31,18 @@ app.get('/create/table/:table', function(req, res) {
 
 app.get('/data/dailyportions', function(req, res) {
 
-  var user = 1; // dev setting!!!
+  //var user = 1; // dev setting!!!
+  var user = (req.session.userid) ? req.session.userid : "";
 
-  db.dailyportions(user, function(data) {
-    res.json(data);
-  });
+  if (user) {
+    db.dailyportions(user, function(data) {
+      res.json(data);
+    });
+
+  } else {
+    res.json({ 'error': 'log in please' });
+
+  }
 
 });
 
@@ -78,18 +92,56 @@ app.post('/add/:target', function(req, res) {
   		  res.json(msg);
   	});
 
-  } else {
-    res.json({
-      'error': 'wtf is ' + target + '???'
-    });
-  }
+  } else { res.json({ 'error': 'wtf is ' + target + '???' }); }
+
+});
+
+// handle login
+
+app.post('/login/', function(req, res) {
+
+  var input = {
+    username: req.body.username,
+    password: req.body.password
+  };
+
+  db.login(input, function(userid, username) {
+    if (userid) {
+      req.session.username = username;
+      req.session.userid = userid;
+      res.json('jeejee');
+    } else { res.json({ 'error': 'wrong username or password' }); }
+  });
+
+});
+
+// route to front-end js
+
+app.get('/front/js', function(req, res) {
+
+  // check if user is logged in
+  var user = (req.session.userid) ? req.session.userid : "";
+
+  if (user) res.sendfile('./www/core.js');
+  else res.sendfile('./www/login.js');
 
 });
 
 // actual html-page, angular handles that sh*t
 
 app.get('*', function(req, res) {
-	res.sendfile('./public/index.html');
+
+  // check if user is logged in
+  var user = (req.session.userid) ? req.session.userid : "";
+
+  if (user) {
+    res.sendfile('./www/index.html');
+
+  } else { 
+    res.sendfile('./www/login.html');
+
+  }
+
 });
 
 // listen

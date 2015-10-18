@@ -39,7 +39,7 @@ var createTable = function(t, callback) {
 	}
 
 	// check if table is declared
-	// then if it exists
+	// check if it exists (in postgres)
 	// if not, create it
 
 	if (!_.isUndefined(dbModels[t])) {
@@ -95,15 +95,12 @@ var add = function (target, input, callback) {
 
 var dailyportions = function (user, callback) {
 
-	// inb4 complex knex-sql-scheise
-
 	// sql explained:
 
-	// join nutriments and portions
+	// join nutriments and portions via nutriments.id
 	// select date, names and sums of nutriments
 	// where user is da user
 	// group by date, name
-	// --> profit???
 
 	knex('portions')
 		.join('nutriments', 'nutriments.id', 'portions.nutriment')
@@ -118,6 +115,17 @@ var dailyportions = function (user, callback) {
 // get daily nutritional values of a user
 
 var dailyvalues = function (user, callback) {
+
+	// sql explained:
+
+	// join nutriments and portions via nutriments.id
+	// select date
+	// calculate nutrional values per date:
+	// --- value * amount / 100
+	// --- divided by 100 because values are issued per 100 grams
+	// where user is da user
+	// group by date
+	// order by desc date so latest are listed first
 
 	knex('portions')
 		.join('nutriments', 'nutriments.id', 'portions.nutriment')
@@ -134,12 +142,28 @@ var dailyvalues = function (user, callback) {
 
 }
 
+var login = function (input, callback) {
+
+	// sql query
+
+	knex('users')
+		.select('password', 'id', 'name')
+		.where({ name: input.username })
+		.then(function(data) {
+			if (hash.verify(input.password, data[0].password)) {
+				callback(data[0].id, data[0].name);
+			}
+		});
+
+}
+
 // exports
 
 module.exports = {
 	createTable: createTable,
 	add: add,
 	dailyportions: dailyportions,
-	dailyvalues: dailyvalues
+	dailyvalues: dailyvalues,
+	login: login
 }
 

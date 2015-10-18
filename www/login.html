@@ -1,0 +1,16 @@
+<html ng-app="zsafka">
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+	<script src="/front/js"></script>
+</head>
+<body ng-controller="main">
+<h1>zsafka</h1>
+<h2>Login</h2>
+<form>
+	Username: <input type="text" ng-model="login.username" required>
+	Password: <input type="password" ng-model="login.password" required>
+	<button type="submit" ng-click="formlogin()">Login</button>
+</form>
+<span>{{ wots.error }}</span>
+</body>
+</html>
